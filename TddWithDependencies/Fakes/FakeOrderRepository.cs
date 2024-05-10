@@ -13,10 +13,10 @@ namespace Tdd.Core.Test.Fakes
             return Task.CompletedTask;
         }
 
-        public Order? GetAsync(int busketId)
+        public Task<Order?> GetAsync(int busketId)
         {
             _data.TryGetValue(busketId, out var order);
-            return order;
+            return Task.FromResult(order);
         }
     }
 }

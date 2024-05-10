@@ -51,5 +51,33 @@ namespace TddWithDependencies
 
             orderRepository.GetAsync(basketId).Should().NotBeNull();
         }
+
+        [Fact]
+        public async Task GivenAnIndvalidBasketId_ThenThrowOrderNotFoundException()
+        {
+            IBasketRepository basketRepository = new FakeBasketRepository();
+            IOrderRepository orderRepository = new FakeOrderRepository();
+
+            var service = new OrderService(basketRepository, orderRepository);
+
+            System.Func<Task> action = () => service.GetOrderAsync(10);
+            await action.Should().ThrowAsync<OrderNotFoundException>();
+        }
+
+        [Fact]
+        public async Task GivenAnValidBasketId_ThenGetOrderDetail()
+        {
+            const int basketId = 1;
+
+            IBasketRepository basketRepository = new FakeBasketRepository();
+            basketRepository.Add(basketId, new Basket { Id = basketId, BuyerId = 100 });
+
+            IOrderRepository orderRepository = new FakeOrderRepository();
+            var orderService = new OrderService(basketRepository, orderRepository);
+
+            await orderService.CreateOrderAsync(basketId, ShippingAddress(), default(CancellationToken));
+
+            orderRepository.GetAsync(basketId).Should().NotBeNull();
+        }
     }
 }

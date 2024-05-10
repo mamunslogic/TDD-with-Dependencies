@@ -5,7 +5,7 @@ namespace Tdd.Core.Repositories
     public interface IOrderRepository
     {
         public Task AddAsync(Order order, CancellationToken cancellationToken);
-        Order? GetAsync(int basketId);
+        public Task<Order?> GetAsync(int basketId);
     }
 }
 

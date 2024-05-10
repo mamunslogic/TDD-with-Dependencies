@@ -27,5 +27,13 @@ namespace Tdd.Core
             var order = new Order(basket.Id, basket.BuyerId, shippingAddress);
             await _orderRepository.AddAsync(order, cancellationToken);
         }
+
+        public async Task<Order> GetOrderAsync(int basketId)
+        {
+            var order = await _orderRepository.GetAsync(basketId);
+            if (order is null)
+                throw new OrderNotFoundException();
+            return order;
+        }
     }
 }
